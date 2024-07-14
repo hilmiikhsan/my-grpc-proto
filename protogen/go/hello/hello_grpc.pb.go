@@ -22,7 +22,7 @@ const (
 	HelloService_SayHello_FullMethodName           = "/hello.HelloService/SayHello"
 	HelloService_SayManyHellos_FullMethodName      = "/hello.HelloService/SayManyHellos"
 	HelloService_SayHelloToEveryone_FullMethodName = "/hello.HelloService/SayHelloToEveryone"
-	HelloService_SayHelloContnuous_FullMethodName  = "/hello.HelloService/SayHelloContnuous"
+	HelloService_SayHelloContinuous_FullMethodName = "/hello.HelloService/SayHelloContinuous"
 )
 
 // HelloServiceClient is the client API for HelloService service.
@@ -32,7 +32,7 @@ type HelloServiceClient interface {
 	SayHello(ctx context.Context, in *HelloRequest, opts ...grpc.CallOption) (*HelloResponse, error)
 	SayManyHellos(ctx context.Context, in *HelloRequest, opts ...grpc.CallOption) (HelloService_SayManyHellosClient, error)
 	SayHelloToEveryone(ctx context.Context, opts ...grpc.CallOption) (HelloService_SayHelloToEveryoneClient, error)
-	SayHelloContnuous(ctx context.Context, opts ...grpc.CallOption) (HelloService_SayHelloContnuousClient, error)
+	SayHelloContinuous(ctx context.Context, opts ...grpc.CallOption) (HelloService_SayHelloContinuousClient, error)
 }
 
 type helloServiceClient struct {
@@ -121,31 +121,31 @@ func (x *helloServiceSayHelloToEveryoneClient) CloseAndRecv() (*HelloResponse, e
 	return m, nil
 }
 
-func (c *helloServiceClient) SayHelloContnuous(ctx context.Context, opts ...grpc.CallOption) (HelloService_SayHelloContnuousClient, error) {
+func (c *helloServiceClient) SayHelloContinuous(ctx context.Context, opts ...grpc.CallOption) (HelloService_SayHelloContinuousClient, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	stream, err := c.cc.NewStream(ctx, &HelloService_ServiceDesc.Streams[2], HelloService_SayHelloContnuous_FullMethodName, cOpts...)
+	stream, err := c.cc.NewStream(ctx, &HelloService_ServiceDesc.Streams[2], HelloService_SayHelloContinuous_FullMethodName, cOpts...)
 	if err != nil {
 		return nil, err
 	}
-	x := &helloServiceSayHelloContnuousClient{ClientStream: stream}
+	x := &helloServiceSayHelloContinuousClient{ClientStream: stream}
 	return x, nil
 }
 
-type HelloService_SayHelloContnuousClient interface {
+type HelloService_SayHelloContinuousClient interface {
 	Send(*HelloRequest) error
 	Recv() (*HelloResponse, error)
 	grpc.ClientStream
 }
 
-type helloServiceSayHelloContnuousClient struct {
+type helloServiceSayHelloContinuousClient struct {
 	grpc.ClientStream
 }
 
-func (x *helloServiceSayHelloContnuousClient) Send(m *HelloRequest) error {
+func (x *helloServiceSayHelloContinuousClient) Send(m *HelloRequest) error {
 	return x.ClientStream.SendMsg(m)
 }
 
-func (x *helloServiceSayHelloContnuousClient) Recv() (*HelloResponse, error) {
+func (x *helloServiceSayHelloContinuousClient) Recv() (*HelloResponse, error) {
 	m := new(HelloResponse)
 	if err := x.ClientStream.RecvMsg(m); err != nil {
 		return nil, err
@@ -160,7 +160,7 @@ type HelloServiceServer interface {
 	SayHello(context.Context, *HelloRequest) (*HelloResponse, error)
 	SayManyHellos(*HelloRequest, HelloService_SayManyHellosServer) error
 	SayHelloToEveryone(HelloService_SayHelloToEveryoneServer) error
-	SayHelloContnuous(HelloService_SayHelloContnuousServer) error
+	SayHelloContinuous(HelloService_SayHelloContinuousServer) error
 	mustEmbedUnimplementedHelloServiceServer()
 }
 
@@ -177,8 +177,8 @@ func (UnimplementedHelloServiceServer) SayManyHellos(*HelloRequest, HelloService
 func (UnimplementedHelloServiceServer) SayHelloToEveryone(HelloService_SayHelloToEveryoneServer) error {
 	return status.Errorf(codes.Unimplemented, "method SayHelloToEveryone not implemented")
 }
-func (UnimplementedHelloServiceServer) SayHelloContnuous(HelloService_SayHelloContnuousServer) error {
-	return status.Errorf(codes.Unimplemented, "method SayHelloContnuous not implemented")
+func (UnimplementedHelloServiceServer) SayHelloContinuous(HelloService_SayHelloContinuousServer) error {
+	return status.Errorf(codes.Unimplemented, "method SayHelloContinuous not implemented")
 }
 func (UnimplementedHelloServiceServer) mustEmbedUnimplementedHelloServiceServer() {}
 
@@ -258,25 +258,25 @@ func (x *helloServiceSayHelloToEveryoneServer) Recv() (*HelloRequest, error) {
 	return m, nil
 }
 
-func _HelloService_SayHelloContnuous_Handler(srv interface{}, stream grpc.ServerStream) error {
-	return srv.(HelloServiceServer).SayHelloContnuous(&helloServiceSayHelloContnuousServer{ServerStream: stream})
+func _HelloService_SayHelloContinuous_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(HelloServiceServer).SayHelloContinuous(&helloServiceSayHelloContinuousServer{ServerStream: stream})
 }
 
-type HelloService_SayHelloContnuousServer interface {
+type HelloService_SayHelloContinuousServer interface {
 	Send(*HelloResponse) error
 	Recv() (*HelloRequest, error)
 	grpc.ServerStream
 }
 
-type helloServiceSayHelloContnuousServer struct {
+type helloServiceSayHelloContinuousServer struct {
 	grpc.ServerStream
 }
 
-func (x *helloServiceSayHelloContnuousServer) Send(m *HelloResponse) error {
+func (x *helloServiceSayHelloContinuousServer) Send(m *HelloResponse) error {
 	return x.ServerStream.SendMsg(m)
 }
 
-func (x *helloServiceSayHelloContnuousServer) Recv() (*HelloRequest, error) {
+func (x *helloServiceSayHelloContinuousServer) Recv() (*HelloRequest, error) {
 	m := new(HelloRequest)
 	if err := x.ServerStream.RecvMsg(m); err != nil {
 		return nil, err
@@ -308,8 +308,8 @@ var HelloService_ServiceDesc = grpc.ServiceDesc{
 			ClientStreams: true,
 		},
 		{
-			StreamName:    "SayHelloContnuous",
-			Handler:       _HelloService_SayHelloContnuous_Handler,
+			StreamName:    "SayHelloContinuous",
+			Handler:       _HelloService_SayHelloContinuous_Handler,
 			ServerStreams: true,
 			ClientStreams: true,
 		},
